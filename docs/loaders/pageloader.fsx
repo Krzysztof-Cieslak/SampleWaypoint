@@ -13,7 +13,7 @@ type Shortcut = {
 
 let loader (projectRoot: string) (siteContet: SiteContents) =
     siteContet.Add({title = "API reference"; link = "/Reference/ApiRef.html"})
-    siteContet.Add({title = "Home"; link = "https://kcieslak.io/SampleWaypoint"; icon = "fas fa-home"})
+    siteContet.Add({title = "Home"; link = "http://kcieslak.io/SampleWaypoint"; icon = "fas fa-home"})
     siteContet.Add({title = "GitHub repo"; link = "https://github.com/Krzysztof-Cieslak/SampleWaypoint"; icon = "fab fa-github"})
-    siteContet.Add({title = "License"; link = "https://kcieslak.io/SampleWaypoint/license.html"; icon = "far fa-file-alt"})
+    siteContet.Add({title = "License"; link = "http://kcieslak.io/SampleWaypoint/license.html"; icon = "far fa-file-alt"})
     siteContet
