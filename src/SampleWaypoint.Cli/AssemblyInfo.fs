@@ -4,7 +4,7 @@ open System.Reflection
 
 [<assembly: AssemblyTitleAttribute("SampleWaypoint.Cli")>]
 [<assembly: AssemblyProductAttribute("SampleWaypoint")>]
-[<assembly: AssemblyDescriptionAttribute("")>]
+[<assembly: AssemblyDescriptionAttribute("Sample application create by Waypoint")>]
 [<assembly: AssemblyVersionAttribute("0.0.1")>]
 [<assembly: AssemblyFileVersionAttribute("0.0.1")>]
 do ()
@@ -12,6 +12,6 @@ do ()
 module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "SampleWaypoint.Cli"
     let [<Literal>] AssemblyProduct = "SampleWaypoint"
-    let [<Literal>] AssemblyDescription = ""
+    let [<Literal>] AssemblyDescription = "Sample application create by Waypoint"
     let [<Literal>] AssemblyVersion = "0.0.1"
     let [<Literal>] AssemblyFileVersion = "0.0.1"
