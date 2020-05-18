@@ -20,10 +20,14 @@ open Fake.Api
 let project = "SampleWaypoint"
 
 let summary = "Sample application create by Waypoint"
+let authors = "Krzysztof Cieslak"
+let tags = "sample"
+let copyright = "Krzysztof Cieslak"
 
 let gitOwner = "Krzysztof-Cieslak"
 let gitName = "SampleWaypoint"
 let gitHome = "https://github.com/" + gitOwner
+let gitUrl = gitHome + "/" + gitName
 
 // --------------------------------------------------------------------------------------
 // Build variables
@@ -34,26 +38,32 @@ let nugetDir  = "./out/"
 
 
 System.Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let release = ReleaseNotes.parse (System.IO.File.ReadAllLines "RELEASE_NOTES.md")
+let changelogFilename = "CHANGELOG.md"
+let changelog = Changelog.load changelogFilename
+let latestEntry = changelog.LatestEntry
+
+let nugetVersion = latestEntry.NuGetVersion
+let packageReleaseNotes = sprintf "%s/blob/v%s/CHANGELOG.md" gitUrl latestEntry.NuGetVersion
+let releaseNotes =
+    latestEntry.Changes
+    |> List.map (fun c -> " * " + c.ToString())
+    |> String.concat "\n"
 
 // --------------------------------------------------------------------------------------
 // Helpers
 // --------------------------------------------------------------------------------------
 let isNullOrWhiteSpace = System.String.IsNullOrWhiteSpace
+
 let exec cmd args dir =
-    if Process.execSimple( fun info ->
+    let proc =
+        CreateProcess.fromRawCommandLine cmd args
+        |> CreateProcess.ensureExitCodeWithMessage (sprintf "Error while running '%s' with args: %s" cmd args)
+    (if isNullOrWhiteSpace dir then proc
+    else proc |> CreateProcess.withWorkingDirectory dir)
+    |> Proc.run
+    |> ignore
 
-        { info with
-            FileName = cmd
-            WorkingDirectory =
-                if (isNullOrWhiteSpace dir) then info.WorkingDirectory
-                else dir
-            Arguments = args
-            }
-    ) System.TimeSpan.MaxValue <> 0 then
-        failwithf "Error while running '%s' with args: %s" cmd args
 let getBuildParam = Environment.environVar
-
 let DoNothing = ignore
 // --------------------------------------------------------------------------------------
 // Build Targets
@@ -61,38 +71,6 @@ let DoNothing = ignore
 
 Target.create "Clean" (fun _ ->
     Shell.cleanDirs [buildDir; nugetDir]
-)
-
-Target.create "AssemblyInfo" (fun _ ->
-    let getAssemblyInfoAttributes projectName =
-        [ AssemblyInfo.Title projectName
-          AssemblyInfo.Product project
-          AssemblyInfo.Description summary
-          AssemblyInfo.Version release.AssemblyVersion
-          AssemblyInfo.FileVersion release.AssemblyVersion ]
-
-    let getProjectDetails projectPath =
-        let projectName = System.IO.Path.GetFileNameWithoutExtension(projectPath)
-        ( projectPath,
-          projectName,
-          System.IO.Path.GetDirectoryName(projectPath),
-          (getAssemblyInfoAttributes projectName)
-        )
-
-    !! "src/**/*.??proj"
-    |> Seq.map getProjectDetails
-    |> Seq.iter (fun (projFileName, _, folderName, attributes) ->
-        match projFileName with
-        | proj when proj.EndsWith("fsproj") -> AssemblyInfoFile.createFSharp (folderName </> "AssemblyInfo.fs") attributes
-        | proj when proj.EndsWith("csproj") -> AssemblyInfoFile.createCSharp ((folderName </> "Properties") </> "AssemblyInfo.cs") attributes
-        | proj when proj.EndsWith("vbproj") -> AssemblyInfoFile.createVisualBasic ((folderName </> "My Project") </> "AssemblyInfo.vb") attributes
-        | _ -> ()
-        )
-)
-
-
-Target.create "Restore" (fun _ ->
-    DotNet.restore id ""
 )
 
 Target.create "Build" (fun _ ->
@@ -115,18 +93,33 @@ Target.create "BuildRelease" (fun _ ->
         { p with
             Configuration = DotNet.BuildConfiguration.Release
             OutputPath = Some buildDir
-            MSBuildParams = { p.MSBuildParams with Properties = [("Version", release.NugetVersion); ("PackageReleaseNotes", String.concat "\n" release.Notes)]}
+            MSBuildParams = { p.MSBuildParams with Properties = [("Version", nugetVersion); ("PackageReleaseNotes", packageReleaseNotes)]}
         }
     ) "SampleWaypoint.sln"
 )
 
 
 Target.create "Pack" (fun _ ->
+    let properties = [
+        ("Version", latestEntry.NuGetVersion);
+        ("Authors", authors)
+        ("PackageProjectUrl", gitUrl)
+        ("PackageTags", tags)
+        ("RepositoryType", "git")
+        ("RepositoryUrl", gitUrl)
+        ("PackageLicenseUrl", gitUrl + "/LICENSE")
+        ("Copyright", copyright)
+        ("PackageReleaseNotes", packageReleaseNotes)
+        ("PackageDescription", summary)
+        ("EnableSourceLink", "true")
+    ]
+
+
     DotNet.pack (fun p ->
         { p with
             Configuration = DotNet.BuildConfiguration.Release
             OutputPath = Some nugetDir
-            MSBuildParams = { p.MSBuildParams with Properties = [("Version", release.NugetVersion); ("PackageReleaseNotes", String.concat "\n" release.Notes)]}
+            MSBuildParams = { p.MSBuildParams with Properties = [("Version", nugetVersion); ("PackageReleaseNotes", packageReleaseNotes)]}
         }
     ) "SampleWaypoint.sln"
 )
@@ -139,12 +132,12 @@ Target.create "ReleaseGitHub" (fun _ ->
         |> function None -> gitHome + "/" + gitName | Some (s: string) -> s.Split().[0]
 
     Git.Staging.stageAll ""
-    Git.Commit.exec "" (sprintf "Bump version to %s" release.NugetVersion)
+    Git.Commit.exec "" (sprintf "Bump version to %s" nugetVersion)
     Git.Branches.pushBranch "" remote (Git.Information.getBranchName "")
 
 
-    Git.Branches.tag "" release.NugetVersion
-    Git.Branches.pushTag "" remote release.NugetVersion
+    Git.Branches.tag "" nugetVersion
+    Git.Branches.pushTag "" remote nugetVersion
 
     let client =
         let user =
@@ -160,10 +153,12 @@ Target.create "ReleaseGitHub" (fun _ ->
         GitHub.createClient user pw
     let files = !! (nugetDir </> "*.nupkg")
 
+
+
     // release on github
     let cl =
         client
-        |> GitHub.draftNewRelease gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes
+        |> GitHub.draftNewRelease gitOwner gitName nugetVersion (latestEntry.SemVer.PreRelease <> None) [releaseNotes]
     (cl,files)
     ||> Seq.fold (fun acc e -> acc |> GitHub.uploadFile e)
     |> GitHub.publishDraft//releaseDraft
@@ -175,7 +170,7 @@ Target.create "Push" (fun _ ->
         match getBuildParam "nuget-key" with
         | s when not (isNullOrWhiteSpace s) -> s
         | _ -> UserInput.getUserPassword "NuGet Key: "
-    Paket.push (fun p -> { p with WorkingDir = buildDir; ApiKey = key }))
+    Paket.push (fun p -> { p with WorkingDir = nugetDir; ApiKey = key; ToolType = ToolType.CreateLocalTool() }))
 
 // --------------------------------------------------------------------------------------
 // Build order
@@ -184,15 +179,11 @@ Target.create "Default" DoNothing
 Target.create "Release" DoNothing
 
 "Clean"
-  ==> "AssemblyInfo"
-  ==> "Restore"
   ==> "Build"
   ==> "Test"
   ==> "Default"
 
 "Clean"
- ==> "AssemblyInfo"
- ==> "Restore"
  ==> "BuildRelease"
  ==> "Docs"
 
