@@ -1,0 +1,183 @@
+<html class="js csstransforms3d">
+  <head>
+    <meta charSet="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>
+      SampleWaypoint | Some Explanation
+    </title>
+    <link rel="icon" type="image/png" sizes="32x32" href="http://kcieslak.io/SampleWaypoint/static/images/favicon.png"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/nucleus.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/fontawesome-all.min.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/hybrid.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/featherlight.min.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/auto-complete.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/atom-one-dark-reasonable.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/theme.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/tips.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/atom-one-dark.min.css"/>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/css/theme-blue.css"/>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <nav id="sidebar">
+      <div id="header-wrapper">
+        <div id="header">
+          <h2 id="logo">
+            SampleWaypoint
+          </h2>
+        </div>
+        <div class="searchbox">
+          <label for="search-by">
+            <i class="fas fa-search"></i>
+          </label>
+          <input data-search-input="" id="search-by" type="search" placeholder="Search..."/>
+          <span data-search-clear="">
+            <i class="fas fa-times"></i>
+          </span>
+        </div>
+        <script type="text/javascript" src="http://kcieslak.io/SampleWaypoint/static/js/lunr.min.js"></script>
+        <script type="text/javascript" src="http://kcieslak.io/SampleWaypoint/static/js/auto-complete.js"></script>
+        <script type="text/javascript">
+          var baseurl ='http://kcieslak.io/SampleWaypoint'
+        </script>
+        <script type="text/javascript" src="http://kcieslak.io/SampleWaypoint/static/js/search.js"></script>
+      </div>
+      <div class="highlightable">
+        <ul class="topics">
+          <li id="menu-explanations" class="dd-item menu-group-link menu-group-link-active">
+            <a>
+              Explanation
+            </a>
+          </li>
+          <li id="menu-tutorials" class="dd-item menu-group-link">
+            <a>
+              Tutorials
+            </a>
+          </li>
+          <li id="menu-howtos" class="dd-item menu-group-link">
+            <a>
+              How-To Guides
+            </a>
+          </li>
+          <li id="menu-refs" class="dd-item menu-group-link">
+            <a>
+              API References
+            </a>
+          </li>
+        </ul>
+        <ul id="submenu-explanations" class="submenu submenu-active">
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/explanations/overview.html" class="padding">
+              SampleWaypoint Overview
+            </a>
+          </li>
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/explanations/some-post.html" class="active-link padding">
+              Some Explanation
+            </a>
+          </li>
+        </ul>
+        <ul id="submenu-tutorials" class="submenu">
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/tutorials/how-to-start.html" class="padding">
+              Getting started
+            </a>
+          </li>
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/tutorials/some-post.html" class="padding">
+              Some Post
+            </a>
+          </li>
+        </ul>
+        <ul id="submenu-howtos" class="submenu">
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/how-tos/somePostWithCode.html" class="padding">
+              Some post with Code
+            </a>
+          </li>
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/how-tos/script.html" class="padding">
+              Sample sample
+            </a>
+          </li>
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/how-tos/diagrams.html" class="padding">
+              Diagrams
+            </a>
+          </li>
+        </ul>
+        <ul id="submenu-refs" class="submenu">
+          <li>
+            <a href="http://kcieslak.io/SampleWaypoint/reference/SampleWaypoint/index.html" class="padding">
+              SampleWaypoint
+            </a>
+          </li>
+        </ul>
+        <section id="shortcuts">
+          <h3>
+            Shortucts
+          </h3>
+          <ul>
+            <li>
+              <a class="padding" href="http://kcieslak.io/SampleWaypoint">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li>
+              <a class="padding" href="https://github.com/Krzysztof-Cieslak/SampleWaypoint">
+                <i class="fab fa-github"></i>
+                GitHub repo
+              </a>
+            </li>
+          </ul>
+        </section>
+        <section id="footer">
+          <p>Built with <a href="https://github.com/ionide/Fornax">Fornax</a>
+        </section>
+      </div>
+    </nav>
+    <section id="body">
+      <div id="overlay"></div>
+      <div class="padding highlightable">
+        <div id="body-inner">
+          <span id="sidebar-toggle-span">
+            <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+              <i class="fas fa-bars"></i>
+               navigation
+            </a>
+          </span>
+          <h1>Some Explanation</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi diam, vehicula quis blandit id, suscipit sed libero. Proin at diam dolor. In hac habitasse platea dictumst. Donec quis dui vitae quam eleifend dignissim non sed libero. In hac habitasse platea dictumst. In ullamcorper mollis risus, a vulputate quam accumsan at. Donec sed felis sodales, blandit orci id, vulputate orci.</p>
+<p>In est nulla, ornare vitae elit sed, consequat sollicitudin dui. Duis posuere nulla malesuada elit volutpat ultricies. Mauris et tellus tortor. In ligula elit, pellentesque eget est et, mattis rhoncus nisl. Sed orci ex, mollis quis justo eu, dapibus tincidunt turpis. Sed rhoncus odio non lacus ullamcorper volutpat. Suspendisse blandit ullamcorper condimentum. Quisque et viverra nisi. Vivamus in mollis nulla. Nulla faucibus sed ligula et blandit.</p>
+<p>Vivamus nec libero faucibus, cursus ex et, consequat mauris. Pellentesque commodo ullamcorper vestibulum. Donec efficitur, ipsum et dapibus varius, purus mauris gravida augue, eu mattis lorem turpis eget dui. Curabitur nibh erat, posuere sed eros a, blandit venenatis risus. Vestibulum cursus imperdiet ultrices. In eu efficitur dui, eget tempus enim. Nunc imperdiet, enim et sagittis lacinia, lacus metus eleifend purus, blandit pellentesque leo ante ac velit. Nam ac sagittis est. Cras accumsan, odio vel lacinia mollis, metus tortor malesuada nisi, et consectetur neque quam in erat. Sed ultricies aliquam hendrerit. Etiam non aliquam ipsum, id rutrum magna. Morbi id tincidunt mauris. Vestibulum nec iaculis massa. Etiam fringilla, orci quis faucibus vulputate, risus nibh finibus nisl, et vehicula ipsum leo a tortor. Curabitur mauris elit, bibendum vitae velit at, dignissim ornare arcu.</p>
+
+
+        </div>
+      </div>
+    </section>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/clipboard.min.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/perfect-scrollbar.min.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/jquery.sticky.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/featherlight.min.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/modernizr.custom-3.6.0.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/learn.js"></script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/hugo-learn.js"></script>
+    <link rel="stylesheet" href="http://kcieslak.io/SampleWaypoint/static/mermaid/mermaid.css"/>
+    <script src="http://kcieslak.io/SampleWaypoint/static/mermaid/mermaid.js"></script>
+    <script>
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/languages/fsharp.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad()
+    </script>
+    <script src="http://kcieslak.io/SampleWaypoint/static/js/tips.js"></script>
+  </body>
+</html>
