@@ -42,10 +42,22 @@ let changelogFilename = "CHANGELOG.md"
 let changelog = Changelog.load changelogFilename
 let latestEntry = changelog.LatestEntry
 
+// Helper function to remove blank lines
+let isEmptyChange = function
+    | Changelog.Change.Added s
+    | Changelog.Change.Changed s
+    | Changelog.Change.Deprecated s
+    | Changelog.Change.Fixed s
+    | Changelog.Change.Removed s
+    | Changelog.Change.Security s
+    | Changelog.Change.Custom (_, s) ->
+        String.isNullOrWhiteSpace s.CleanedText
+
 let nugetVersion = latestEntry.NuGetVersion
 let packageReleaseNotes = sprintf "%s/blob/v%s/CHANGELOG.md" gitUrl latestEntry.NuGetVersion
 let releaseNotes =
     latestEntry.Changes
+    |> List.filter (isEmptyChange >> not)
     |> List.map (fun c -> " * " + c.ToString())
     |> String.concat "\n"
 
@@ -101,7 +113,7 @@ Target.create "BuildRelease" (fun _ ->
 
 Target.create "Pack" (fun _ ->
     let properties = [
-        ("Version", latestEntry.NuGetVersion);
+        ("Version", nugetVersion);
         ("Authors", authors)
         ("PackageProjectUrl", gitUrl)
         ("PackageTags", tags)
@@ -119,7 +131,7 @@ Target.create "Pack" (fun _ ->
         { p with
             Configuration = DotNet.BuildConfiguration.Release
             OutputPath = Some nugetDir
-            MSBuildParams = { p.MSBuildParams with Properties = [("Version", nugetVersion); ("PackageReleaseNotes", packageReleaseNotes)]}
+            MSBuildParams = { p.MSBuildParams with Properties = properties}
         }
     ) "SampleWaypoint.sln"
 )
